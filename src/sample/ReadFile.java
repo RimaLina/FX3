@@ -21,29 +21,31 @@ public class ReadFile {
 
     public void ReadFile(){
 
-
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("zodziai.txt")));
             String line=null;
             while((line=bufferedReader.readLine())!=null){
                 String[] elements = line.split("-");
                 if (elements.length == 2){
-                    List<String> ltList = engMap.get(elements[0]);
 
-                    if (ltList!=null){
-                        ltList.add(elements[1]);
-                        engMap.put(elements[0],ltList);
-                    }
-                    else{
-                        ltList = new ArrayList<>();
-                        ltList.add(elements[1]);
-                        engMap.put(elements[0],ltList);
-                    }
+                    addItemMap(elements[0], elements[1], engMap);
+                    addItemMap(elements[1], elements[0], ltMap);
 
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void addItemMap(String key, String value, Map<String, List<String>> map){
+
+        List<String> words = map.get(key);// gauti value is map'o pagal key
+        if (words==null){
+            words = new ArrayList<>();
+        }
+        words.add(value); //i lista ideda reiksme
+        map.put(key, words); //idedam lista i map'a
+
     }
 }

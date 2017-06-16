@@ -2,6 +2,8 @@ package sample;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 
@@ -17,10 +19,10 @@ public class Controller {
     private TextField input;
 
     @FXML
-    private TextField input2;
+    private TextArea output;
 
-    private Map<String, String> engMap = new HashMap<>();
-    private Map<String, String> ltMap = new HashMap<>();
+    private Map<String, List<String>> engMap = new HashMap<>();
+    private Map<String, List<String>> ltMap = new HashMap<>();
 
 
     public void translate(ActionEvent event){
@@ -28,18 +30,35 @@ public class Controller {
             ReadFile readFile = new ReadFile(engMap,ltMap);
             readFile.ReadFile();
         }
-        String inp = input.getText();
-        String inp2 = input2.getText();
+        String word = input.getText();
 
-        String engTransl = engMap.get(inp);
-        String ltTransl = ltMap.get(inp2);
+        List<String> words = engMap.get(word);
 
-        if (engTransl!=null ){
 
-            input2.setText(engTransl);
+        if (words==null){
+            words = ltMap.get(word);
+
+        }
+        printResult(words);
+    }
+
+    private void printResult(List<String> words){
+        if(words!=null && !words.isEmpty()){
+            StringBuilder sb = new StringBuilder();
+            for(String w: words){
+
+                sb.append(w).append("\n");
+            }
+            output.setText(sb.toString());
+
         }
         else {
-            input.setText(ltTransl);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Tokio zodzio juk nera!!!");
+            alert.show();;
+
         }
     }
+
+
 }
